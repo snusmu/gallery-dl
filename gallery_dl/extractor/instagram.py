@@ -239,6 +239,10 @@ class InstagramExtractor(Extractor):
                 "post_id" : post["pk"],
                 "post_shortcode": post["code"],
                 "likes": post.get("like_count", 0),
+                "comments": post.get("comment_count", 0),
+                "views": (post.get("play_count") or
+                          post.get("view_count") or
+                          post.get("ig_play_count")),
                 "liked": post.get("has_liked", False),
                 "pinned": self._extract_pinned(post),
             }
@@ -422,6 +426,9 @@ class InstagramExtractor(Extractor):
         data = {
             "typename"   : typename,
             "likes"      : post["edge_media_preview_like"]["count"],
+            "comments"   : post.get("edge_media_to_comment", {}).get("count", 0),
+            "views"      : (post.get("video_view_count") or
+                            post.get("video_play_count")),
             "liked"      : post.get("viewer_has_liked", False),
             "pinned"     : pinned,
             "owner_id"   : owner["id"],
